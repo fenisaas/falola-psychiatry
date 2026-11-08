@@ -24,7 +24,6 @@ RUN apt-get update \
         bcmath \
         intl \
         mbstring \
-        opcache \
         pdo_mysql \
         pdo_sqlite \
         zip \

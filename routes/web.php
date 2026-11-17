@@ -5,9 +5,12 @@ use App\Http\Controllers\PatientInformationController;
 use App\Http\Controllers\PatientPortalController;
 use App\Http\Controllers\ServiceController;
 use App\Support\PracticePolicyCatalog;
+use App\Support\TestimonialCatalog;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'home')->name('home');
+Route::view('/', 'home', [
+    'testimonials' => TestimonialCatalog::all(),
+])->name('home');
 
 Route::view('/about', 'about')->name('about');
 

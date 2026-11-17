@@ -221,6 +221,111 @@
         </div>
     </section>
 
+    <section class="relative isolate overflow-hidden bg-white" aria-labelledby="testimonials-heading">
+        <div class="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-brand-beige/55 to-transparent"></div>
+
+        <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
+            <div class="mx-auto max-w-3xl text-center">
+                <h2 id="testimonials-heading" class="font-serif text-4xl font-normal leading-tight tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
+                    What Patients Have Shared
+                </h2>
+                <p class="mt-3 text-[1.0625rem] leading-7 text-slate-700 sm:text-lg">
+                    Reflections from patients about their experiences with Falola Psychiatry Practice.
+                </p>
+            </div>
+
+            <div
+                class="mx-auto mt-9 max-w-5xl rounded-[2rem] border border-brand-sand bg-brand-ivory shadow-[0_22px_60px_rgba(0,61,45,0.11)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green"
+                x-data="testimonialCarousel({ count: {{ count($testimonials) }} })"
+                @keydown="handleKeydown($event)"
+                role="region"
+                aria-roledescription="carousel"
+                aria-label="Patient testimonials"
+                tabindex="0"
+            >
+                <div id="testimonial-slides" class="relative overflow-hidden px-6 py-9 sm:px-10 sm:py-11 lg:px-16 lg:py-12" aria-live="polite" aria-atomic="true">
+                    <svg class="absolute -left-2 -top-5 size-32 text-brand-green/8 sm:left-4 sm:size-36" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+                        <path d="M13.8 35.1c0-11.7 6.2-21.1 18.5-28.2l3.2 5.2C27.8 17.4 24 23.2 23.8 29.6h10.6v23H13.8V35.1Zm27.3 0c0-11.7 6.2-21.1 18.5-28.2l3.2 5.2c-7.7 5.3-11.5 11.1-11.7 17.5h10.6v23H41.1V35.1Z" />
+                    </svg>
+
+                    @foreach ($testimonials as $testimonial)
+                        <article
+                            x-show="active === {{ $loop->index }}"
+                            @if (! $loop->first) x-cloak @endif
+                            class="relative"
+                            role="group"
+                            aria-roledescription="slide"
+                            aria-label="{{ $loop->iteration }} of {{ $loop->count }}"
+                            data-testimonial-slide
+                        >
+                            <blockquote class="mx-auto max-w-4xl">
+                                <p class="text-pretty text-[1.0625rem] leading-8 text-slate-800 sm:text-xl sm:leading-9 lg:text-[1.375rem]">
+                                    {{ $testimonial['quote'] }}
+                                </p>
+                                <footer class="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-brand-sand/80 pt-5">
+                                    <cite class="not-italic font-semibold text-brand-green">{{ $testimonial['name'] }}</cite>
+                                    <span class="text-sm text-slate-600">{{ $testimonial['date'] }}</span>
+                                </footer>
+                            </blockquote>
+                        </article>
+                    @endforeach
+                </div>
+
+                <div class="flex flex-col gap-5 border-t border-brand-sand/80 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+                    <div class="flex items-center justify-center gap-3 sm:order-2">
+                        <button
+                            type="button"
+                            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-green/25 bg-white text-brand-green shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+                            @click="previous()"
+                            aria-label="Show previous testimonial"
+                            aria-controls="testimonial-slides"
+                            data-testimonial-previous
+                        >
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.5 17-5-5 5-5" />
+                            </svg>
+                        </button>
+                        <p class="min-w-14 text-center text-sm font-semibold tabular-nums text-brand-green" aria-hidden="true">
+                            <span x-text="active + 1">1</span> / {{ count($testimonials) }}
+                        </p>
+                        <button
+                            type="button"
+                            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-green/25 bg-white text-brand-green shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+                            @click="next()"
+                            aria-label="Show next testimonial"
+                            aria-controls="testimonial-slides"
+                            data-testimonial-next
+                        >
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.5 7 5 5-5 5" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-center gap-1 sm:order-1" aria-label="Choose a testimonial">
+                        @foreach ($testimonials as $testimonial)
+                            <button
+                                type="button"
+                                class="group inline-flex size-6 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-green"
+                                @click="goTo({{ $loop->index }})"
+                                :aria-current="active === {{ $loop->index }} ? 'true' : 'false'"
+                                aria-label="Show testimonial {{ $loop->iteration }} of {{ $loop->count }} from {{ $testimonial['name'] }}"
+                                aria-controls="testimonial-slides"
+                                data-testimonial-indicator
+                            >
+                                <span
+                                    class="h-2 rounded-full motion-safe:transition-all motion-safe:duration-200"
+                                    :class="active === {{ $loop->index }} ? 'w-5 bg-brand-green' : 'w-2 bg-brand-green/30 group-hover:bg-brand-green/55'"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="relative isolate overflow-hidden">
         <img
             class="absolute inset-0 -z-20 size-full object-cover object-center"

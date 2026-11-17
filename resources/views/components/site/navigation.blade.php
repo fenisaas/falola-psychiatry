@@ -28,7 +28,7 @@
     </nav>
 
     <div class="hidden border-t border-brand-sand/60 bg-brand-ivory/55 min-[1380px]:block" data-desktop-action-row>
-        <div class="mx-auto flex max-w-[90rem] items-center justify-start gap-4 px-8 py-3">
+        <div class="mx-auto flex max-w-[90rem] items-center justify-center gap-4 px-8 py-3">
             @if ($patientPortalUrl !== null)
                 <x-site.button-link class="min-w-56" :href="$patientPortalUrl" variant="outline" icon="portal" prominent external>
                     Patient Portal

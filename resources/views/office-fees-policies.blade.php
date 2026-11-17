@@ -77,11 +77,6 @@
         <div class="mx-auto grid max-w-7xl gap-7 lg:grid-cols-2">
             <article class="rounded-3xl bg-brand-green px-7 py-9 text-white shadow-[0_14px_38px_rgba(0,61,45,0.16)] sm:px-10 lg:col-span-2 lg:px-12" id="consultation-fees">
                 <h2 class="font-serif text-4xl font-normal tracking-[-0.03em] text-white sm:text-5xl">Office Fees</h2>
-                <div class="mt-5 rounded-xl border border-white/30 bg-white/12 px-5 py-4">
-                    <p class="font-semibold">Fee verification required</p>
-                    <p class="mt-1 text-sm leading-6 text-white/85">The preserved self-pay amounts conflict with historical payment-link amounts and require practice confirmation before scheduling or paying.</p>
-                </div>
-
                 <div class="mt-7 grid gap-4">
                     @foreach ($officeFees as $officeFee)
                         <p class="text-base leading-7 text-white/90">{{ $officeFee }}</p>

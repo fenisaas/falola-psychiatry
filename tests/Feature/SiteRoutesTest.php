@@ -250,8 +250,8 @@ class SiteRoutesTest extends TestCase
             ->assertSee('Office Fees &amp; Practice Policies', false)
             ->assertSee('Office Fees')
             ->assertSee('With Insurance: Only your co-pay required at the time of visit.')
-            ->assertSee('Fee verification required')
-            ->assertSee('The preserved self-pay amounts conflict with historical payment-link amounts and require practice confirmation before scheduling or paying.')
+            ->assertDontSee('Fee verification required')
+            ->assertDontSee('The preserved self-pay amounts conflict with historical payment-link amounts and require practice confirmation before scheduling or paying.')
             ->assertSee('Practice Policies')
             ->assertSee('72-hour notice')
             ->assertSee('48–72 hours')
@@ -298,7 +298,7 @@ class SiteRoutesTest extends TestCase
         $this->assertStringContainsString('ml-auto hidden items-center gap-6 min-[1380px]:flex', $header);
         $this->assertStringContainsString('data-desktop-action-row', $header);
         $this->assertLessThan(strpos($header, 'data-desktop-action-row'), strpos($header, '</nav>'));
-        $this->assertStringContainsString('items-center justify-start gap-4', $header);
+        $this->assertStringContainsString('items-center justify-center gap-4', $header);
         $this->assertStringContainsString('min-w-56', $header);
         $this->assertStringContainsString('min-w-72', $header);
         $this->assertSame(2, substr_count($header, 'min-h-14'));

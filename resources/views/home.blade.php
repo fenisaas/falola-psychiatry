@@ -99,6 +99,30 @@
 @endphp
 
 @section('content')
+    <section class="border-y border-brand-sand/70 bg-brand-beige">
+        <div class="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 sm:py-11 lg:grid-cols-[0.75fr_1.75fr] lg:items-center lg:gap-12 lg:px-10 lg:py-10">
+            <div class="lg:border-r lg:border-brand-green/30 lg:pr-12">
+                <h2 class="font-serif text-4xl font-normal leading-none tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
+                    Accepted Insurance
+                </h2>
+                <p class="mt-5 max-w-sm text-base leading-7 text-slate-700">
+                    The existing practice website identifies these eight insurance providers.
+                </p>
+            </div>
+
+            <div>
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+                    @foreach ($insurers as $insurer)
+                        <x-site.insurance-logo :name="$insurer" />
+                    @endforeach
+                </div>
+                <p class="mt-4 text-[0.8125rem] leading-5 text-slate-600">
+                    Insurance participation varies by plan and must be confirmed directly with the practice and your insurer before scheduling.
+                </p>
+            </div>
+        </div>
+    </section>
+
     <section
         class="relative isolate overflow-hidden bg-brand-ivory"
         x-data="heroCarousel({ count: {{ count($heroImages) }}, intervalMs: 5500 })"
@@ -171,30 +195,6 @@
                         Learn More About Dr. Falola
                     </x-site.button-link>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="border-y border-brand-sand/70 bg-brand-beige">
-        <div class="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 sm:py-11 lg:grid-cols-[0.75fr_1.75fr] lg:items-center lg:gap-12 lg:px-10 lg:py-10">
-            <div class="lg:border-r lg:border-brand-green/30 lg:pr-12">
-                <h2 class="font-serif text-4xl font-normal leading-none tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
-                    Accepted Insurance
-                </h2>
-                <p class="mt-5 max-w-sm text-base leading-7 text-slate-700">
-                    The existing practice website identifies these eight insurance providers.
-                </p>
-            </div>
-
-            <div>
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-                    @foreach ($insurers as $insurer)
-                        <x-site.insurance-logo :name="$insurer" />
-                    @endforeach
-                </div>
-                <p class="mt-4 text-[0.8125rem] leading-5 text-slate-600">
-                    Insurance participation varies by plan and must be confirmed directly with the practice and your insurer before scheduling.
-                </p>
             </div>
         </div>
     </section>
@@ -489,8 +489,8 @@
                             class="size-full object-cover object-center"
                             src="{{ asset($officePhotoPath) }}"
                             alt="Falola Psychiatry Practice entrance at 3516 Vann Road in Trussville."
-                            width="1776"
-                            height="866"
+                            width="1774"
+                            height="887"
                             loading="lazy"
                         >
                     </figure>

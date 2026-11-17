@@ -37,16 +37,16 @@ class SiteRoutesTest extends TestCase
         $content = $response->getContent();
 
         $this->assertLessThan(
+            strpos($content, 'Personalized, Evidence-Based Psychiatric Care'),
+            strpos($content, 'Accepted Insurance'),
+        );
+        $this->assertLessThan(
             strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
             strpos($content, 'Personalized, Evidence-Based Psychiatric Care'),
         );
         $this->assertLessThan(
-            strpos($content, 'Accepted Insurance'),
-            strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
-        );
-        $this->assertLessThan(
             strpos($content, 'Comprehensive Psychiatric Services'),
-            strpos($content, 'Accepted Insurance'),
+            strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
         );
         $this->assertSame(3, substr_count($content, 'data-hero-slide'));
         $this->assertStringContainsString('heroCarousel({ count: 3, intervalMs: 5500 })', $content);
@@ -295,15 +295,16 @@ class SiteRoutesTest extends TestCase
         $this->assertSame(2, substr_count($header, 'href="'.route('appointments').'"'));
         $this->assertSame(0, substr_count($header, 'href="'.route('patient-information').'"'));
         $this->assertStringContainsString('sticky top-0', $header);
-        $this->assertStringContainsString('items-center gap-6 min-[1380px]:flex', $header);
+        $this->assertStringContainsString('ml-auto hidden items-center gap-6 min-[1380px]:flex', $header);
         $this->assertStringContainsString('data-desktop-action-row', $header);
         $this->assertLessThan(strpos($header, 'data-desktop-action-row'), strpos($header, '</nav>'));
+        $this->assertStringContainsString('items-center justify-start gap-4', $header);
         $this->assertStringContainsString('min-w-56', $header);
         $this->assertStringContainsString('min-w-72', $header);
         $this->assertSame(2, substr_count($header, 'min-h-14'));
         $this->assertStringContainsString('Office Fees &amp; Policies', $header);
         $this->assertSame(1, substr_count($header, 'src="'.asset('images/home/logo-mark-transparent.png').'"'));
-        $this->assertStringContainsString('absolute left-1/2', $header);
+        $this->assertStringNotContainsString('absolute left-1/2', $header);
         $this->assertStringNotContainsString('brand-lockup-mark', $header);
         $this->assertFileExists(public_path('images/home/logo-mark-transparent.png'));
     }

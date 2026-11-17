@@ -16,7 +16,7 @@
                     <a class="footer-link" href="{{ route('services.index') }}">Services</a>
                     <a class="footer-link" href="{{ route('telepsychiatry') }}">Telepsychiatry</a>
                     <a class="footer-link" href="{{ route('patient-information') }}">Patient Information</a>
-                    <a class="footer-link" href="{{ route('office-fees-policies') }}">Office, Fees &amp; Policies</a>
+                    <a class="footer-link" href="{{ route('office-fees-policies') }}">Office Fees &amp; Policies</a>
                     <a class="footer-link" href="{{ route('contact') }}">Contact</a>
                 </nav>
             </div>
@@ -38,7 +38,7 @@
                     </a>
                     <span class="inline-flex items-start gap-3">
                         <svg class="mt-0.5 size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s6-5.25 6-11.25a6 6 0 1 0-12 0C6 15.75 12 21 12 21Z" /><circle cx="12" cy="9.75" r="2.25" /></svg>
-                        289 Glen Cross Dr, Trussville, AL 35173
+                        {{ config('practice.address.full') }}
                     </span>
                 </address>
             </div>

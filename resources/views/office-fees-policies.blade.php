@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Office, Fees & Practice Policies | Falola Psychiatry Practice')
+@section('title', 'Office Fees & Practice Policies | Falola Psychiatry Practice')
 @section('meta_description', 'Review office procedures, fee information, payment policies, telepsychiatry requirements, records, privacy, and other practice policies.')
 @section('canonical', route('office-fees-policies'))
 
@@ -10,7 +10,7 @@
             <div class="flex items-center px-5 py-14 sm:px-8 lg:px-14 lg:py-12 xl:px-20">
                 <div class="max-w-xl">
                     <h1 class="text-balance font-serif text-5xl font-normal leading-[0.98] tracking-[-0.035em] text-brand-green sm:text-6xl lg:text-[3.75rem]">
-                        Office, Fees &amp; Practice Policies
+                        Office Fees &amp; Practice Policies
                     </h1>
                     <p class="mt-5 max-w-lg text-base leading-7 text-slate-800 sm:text-[1.0625rem]">
                         Review office procedures, payment information, and practice policies for Falola Psychiatry Practice.
@@ -46,8 +46,8 @@
                     <svg class="size-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="m4 7.5 7.5-4h7A1.5 1.5 0 0 1 20 5v7.5l-8.25 8.25a1.5 1.5 0 0 1-2.12 0L3.25 14.37a1.5 1.5 0 0 1 0-2.12L4 11.5v-4Z" /><circle cx="15.5" cy="8" r="1.25" /></svg>
                 </span>
                 <div>
-                    <h2 class="font-serif text-2xl font-normal text-brand-green">Consultation Fees</h2>
-                    <p class="mt-2 text-base leading-7 text-slate-700">Contact the office for consultation costs and payment information.</p>
+                    <h2 class="font-serif text-2xl font-normal text-brand-green">Office Fees</h2>
+                    <p class="mt-2 text-base leading-7 text-slate-700">Review fee wording and payment conditions with the verification notice below.</p>
                 </div>
             </article>
 
@@ -75,23 +75,21 @@
 
     <section class="bg-white px-5 pb-14 sm:px-8 lg:px-10 lg:pb-20">
         <div class="mx-auto grid max-w-7xl gap-7 lg:grid-cols-2">
-            <article class="rounded-3xl bg-brand-green px-7 py-9 text-white shadow-[0_14px_38px_rgba(0,61,45,0.16)] sm:px-10 lg:px-12" id="consultation-fees">
-                <h2 class="font-serif text-4xl font-normal tracking-[-0.03em] text-white sm:text-5xl">Consultation Fees</h2>
-                <p class="mt-3 text-base leading-7 text-white/85">Contact the office for current consultation fees and payment options.</p>
+            <article class="rounded-3xl bg-brand-green px-7 py-9 text-white shadow-[0_14px_38px_rgba(0,61,45,0.16)] sm:px-10 lg:col-span-2 lg:px-12" id="consultation-fees">
+                <h2 class="font-serif text-4xl font-normal tracking-[-0.03em] text-white sm:text-5xl">Office Fees</h2>
+                <div class="mt-5 rounded-xl border border-white/30 bg-white/12 px-5 py-4">
+                    <p class="font-semibold">Fee verification required</p>
+                    <p class="mt-1 text-sm leading-6 text-white/85">The preserved self-pay amounts conflict with historical payment-link amounts and require practice confirmation before scheduling or paying.</p>
+                </div>
 
-                <dl class="mt-7 grid gap-3">
-                    <div class="flex flex-col gap-1 rounded-xl bg-white/14 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                        <dt class="font-semibold">New Patient Consultation</dt>
-                        <dd class="text-lg font-semibold">Contact office</dd>
-                    </div>
-                    <div class="flex flex-col gap-1 rounded-xl bg-white/14 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-                        <dt class="font-semibold">Follow-Up Appointment</dt>
-                        <dd class="text-lg font-semibold">Contact office</dd>
-                    </div>
-                </dl>
+                <div class="mt-7 grid gap-4">
+                    @foreach ($officeFees as $officeFee)
+                        <p class="text-base leading-7 text-white/90">{{ $officeFee }}</p>
+                    @endforeach
+                </div>
             </article>
 
-            <article id="insurance-payment" class="relative isolate overflow-hidden rounded-3xl border border-brand-sand/70 bg-brand-ivory px-7 py-9 shadow-[0_12px_34px_rgba(31,50,42,0.07)] sm:px-10 lg:px-12">
+            <article id="insurance-payment" class="relative isolate overflow-hidden rounded-3xl border border-brand-sand/70 bg-brand-ivory px-7 py-9 shadow-[0_12px_34px_rgba(31,50,42,0.07)] sm:px-10 lg:col-span-2 lg:px-12">
                 <svg class="absolute -bottom-16 -right-12 -z-10 size-72 text-[#dce9d7]" viewBox="0 0 300 300" fill="currentColor" aria-hidden="true"><path opacity=".7" d="M20 280c50-98 114-67 150-147 24-54 56-83 110-103-3 72-16 126-48 167-42 54-101 73-212 83Z" /><path opacity=".45" d="M66 288c45-70 90-71 135-112 34-31 57-69 79-119-3 86-25 145-72 181-37 28-80 43-142 50Z" /></svg>
                 <div class="flex items-start gap-5">
                     <span class="grid size-14 shrink-0 place-items-center rounded-xl bg-[#edf4ea] text-brand-green" aria-hidden="true">

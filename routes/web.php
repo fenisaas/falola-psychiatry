@@ -26,6 +26,7 @@ Route::get('/patient-information', [PatientInformationController::class, 'index'
     ->name('patient-information');
 
 Route::view('/office-fees-policies', 'office-fees-policies', [
+    'officeFees' => PracticePolicyCatalog::officeFees(),
     'policies' => PracticePolicyCatalog::all(),
 ])->name('office-fees-policies');
 

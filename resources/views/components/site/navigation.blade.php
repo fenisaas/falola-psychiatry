@@ -1,5 +1,5 @@
 <header class="sticky top-0 z-40 border-b border-brand-sand/70 bg-white" x-data="{ navigationOpen: false }" @keydown.escape.window="navigationOpen = false">
-    <nav class="relative mx-auto flex max-w-[90rem] items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8" aria-label="Primary navigation">
+    <nav class="relative mx-auto flex max-w-[90rem] items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8" aria-label="Primary navigation">
         <x-site.logo compact />
 
         <div class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 min-[1380px]:flex">
@@ -10,19 +10,8 @@
                 <svg class="size-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m3 4.5 3 3 3-3" /></svg>
             </a>
             <a class="site-nav-link {{ request()->routeIs('telepsychiatry') ? 'site-nav-link-active' : '' }}" href="{{ route('telepsychiatry') }}">Telepsychiatry</a>
-            <a class="site-nav-link {{ request()->routeIs('office-fees-policies') ? 'site-nav-link-active' : '' }}" href="{{ route('office-fees-policies') }}">Office, Fees &amp; Policies</a>
+            <a class="site-nav-link {{ request()->routeIs('office-fees-policies') ? 'site-nav-link-active' : '' }}" href="{{ route('office-fees-policies') }}">Office Fees &amp; Policies</a>
             <a class="site-nav-link {{ request()->routeIs('contact') ? 'site-nav-link-active' : '' }}" href="{{ route('contact') }}">Contact</a>
-        </div>
-
-        <div class="ml-auto hidden items-center gap-2 lg:flex">
-            @if ($patientPortalUrl !== null)
-                <x-site.button-link :href="$patientPortalUrl" variant="outline" compact external>
-                    Patient Portal
-                </x-site.button-link>
-            @endif
-            <x-site.button-link :href="route('appointments')" icon="calendar" compact>
-                Book an Appointment
-            </x-site.button-link>
         </div>
 
         <button
@@ -38,6 +27,19 @@
         </button>
     </nav>
 
+    <div class="hidden border-t border-brand-sand/60 bg-brand-ivory/55 min-[1380px]:block" data-desktop-action-row>
+        <div class="mx-auto flex max-w-[90rem] items-center justify-end gap-3 px-8 py-2.5">
+            @if ($patientPortalUrl !== null)
+                <x-site.button-link class="min-w-44" :href="$patientPortalUrl" variant="outline" external>
+                    Patient Portal
+                </x-site.button-link>
+            @endif
+            <x-site.button-link class="min-w-52" :href="route('appointments')" icon="calendar">
+                Book an Appointment
+            </x-site.button-link>
+        </div>
+    </div>
+
     <div
         id="mobile-navigation"
         class="absolute inset-x-0 top-full border-y border-brand-sand bg-white px-5 py-6 shadow-xl min-[1380px]:hidden"
@@ -51,7 +53,7 @@
             <a class="mobile-nav-link" href="{{ route('about') }}" @click="navigationOpen = false">About</a>
             <a class="mobile-nav-link" href="{{ route('services.index') }}" @click="navigationOpen = false">Services</a>
             <a class="mobile-nav-link" href="{{ route('telepsychiatry') }}" @click="navigationOpen = false">Telepsychiatry</a>
-            <a class="mobile-nav-link" href="{{ route('office-fees-policies') }}" @click="navigationOpen = false">Office, Fees &amp; Policies</a>
+            <a class="mobile-nav-link" href="{{ route('office-fees-policies') }}" @click="navigationOpen = false">Office Fees &amp; Policies</a>
             <a class="mobile-nav-link" href="{{ route('contact') }}" @click="navigationOpen = false">Contact</a>
             <a class="mobile-nav-link" href="tel:+16593466314">Call (659) 346-6314</a>
             <div class="mt-4 grid gap-3 sm:grid-cols-2">

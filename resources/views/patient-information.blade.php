@@ -145,7 +145,7 @@
                         </div>
                         <div id="fees-payment" class="scroll-mt-24">
                             <h3 class="font-serif text-2xl font-normal text-brand-green">Fees &amp; Payment</h3>
-                            <p class="mt-1 text-base leading-7 text-slate-700">Contact the office for current fees, payment methods, and any amount due at the time of service.</p>
+                            <p class="mt-1 text-base leading-7 text-slate-700">Current fees, payment methods, and any amount due at the time of service must be confirmed before the appointment.</p>
                         </div>
                     </div>
                     <div class="mt-7">

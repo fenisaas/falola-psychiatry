@@ -65,7 +65,10 @@ class HomepageTestimonialsTest extends TestCase
             ->assertSee('aria-label="Show previous testimonial"', false)
             ->assertSee('aria-label="Show next testimonial"', false)
             ->assertSee('data-testimonial-autoplay', false)
-            ->assertSee('motion-safe:duration-500', false);
+            ->assertSee('motion-safe:duration-500', false)
+            ->assertDontSee('Auto-rotating testimonials')
+            ->assertDontSee('Paused while interacting')
+            ->assertDontSee('Automatic rotation paused');
     }
 
     public function test_testimonial_content_is_html_escaped(): void

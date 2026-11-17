@@ -68,6 +68,21 @@
         ],
     ];
 
+    $heroImages = [
+        [
+            'path' => 'images/home/hero-mountains.webp',
+            'position' => 'object-[68%_center]',
+        ],
+        [
+            'path' => 'images/home/service-anxiety.jpg',
+            'position' => 'object-center',
+        ],
+        [
+            'path' => 'images/home/service-trauma.jpg',
+            'position' => 'object-center',
+        ],
+    ];
+
     $insurers = [
         'Medicare',
         'United Health care',
@@ -81,24 +96,68 @@
 @endphp
 
 @section('content')
-    <section class="relative isolate overflow-hidden bg-brand-ivory">
-        <img
-            class="absolute inset-0 -z-20 size-full object-cover object-[68%_center]"
-            src="{{ asset('images/home/hero-mountains.webp') }}"
-            alt=""
-            width="2172"
-            height="724"
-            fetchpriority="high"
-        >
+    <section class="border-b border-brand-sand/70 bg-brand-beige">
+        <div class="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[0.7fr_1.7fr] lg:items-center lg:px-10">
+            <div class="lg:border-r lg:border-brand-green/30 lg:pr-10">
+                <h2 class="font-serif text-4xl font-normal leading-none tracking-[-0.025em] text-brand-green">
+                    Accepted Insurance
+                </h2>
+                <p class="mt-4 max-w-sm text-base leading-7 text-slate-700">
+                    The existing practice website identifies these eight insurance providers.
+                </p>
+            </div>
+
+            <div>
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    @foreach ($insurers as $insurer)
+                        <x-site.insurance-logo :name="$insurer" />
+                    @endforeach
+                </div>
+                <p class="mt-4 text-xs leading-5 text-slate-600">
+                    Insurance participation varies by plan and must be confirmed directly with the practice and your insurer before scheduling.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section
+        class="relative isolate overflow-hidden bg-brand-ivory"
+        x-data="heroCarousel({ count: {{ count($heroImages) }}, intervalMs: 5500 })"
+        @mouseenter="pause()"
+        @mouseleave="resume()"
+        @focusin="pause()"
+        @focusout="if (!$el.contains($event.relatedTarget)) { resume() }"
+        aria-label="Homepage introduction"
+    >
+        @foreach ($heroImages as $heroImage)
+            <img
+                x-show="active === {{ $loop->index }}"
+                x-transition:enter="motion-safe:transition-opacity motion-safe:duration-700 motion-safe:ease-out"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                @if (! $loop->first) x-cloak @endif
+                class="absolute inset-0 -z-20 size-full object-cover {{ $heroImage['position'] }}"
+                src="{{ asset($heroImage['path']) }}"
+                alt=""
+                width="2172"
+                height="724"
+                @if ($loop->first)
+                    fetchpriority="high"
+                @else
+                    loading="lazy"
+                @endif
+                data-hero-slide
+            >
+        @endforeach
         <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(251,248,242,1)_0%,rgba(251,248,242,0.96)_32%,rgba(251,248,242,0.68)_48%,rgba(251,248,242,0.08)_72%)] max-md:bg-[linear-gradient(90deg,rgba(251,248,242,0.98)_0%,rgba(251,248,242,0.9)_58%,rgba(251,248,242,0.42)_100%)]"></div>
 
         <div class="mx-auto flex min-h-[32rem] max-w-7xl items-center px-5 py-16 sm:px-8 lg:min-h-[28rem] lg:px-10 lg:py-14">
             <div class="max-w-xl">
                 <h1 class="text-balance font-serif text-5xl font-normal leading-[0.95] tracking-[-0.035em] text-brand-green sm:text-6xl lg:text-[3.75rem] xl:text-[4rem]">
-                    Evidence-Based Mental Health Care for Adults
+                    Personalized, Evidence-Based Psychiatric Care
                 </h1>
                 <p class="mt-4 max-w-lg text-base leading-6 text-slate-800 sm:text-lg sm:leading-7">
-                    Comprehensive and compassionate care with a focus on empathy and respect. Flexible hours, anywhere in Alabama via telepsychiatry.
+                    Compassionate psychiatric evaluations and medication management for adults, with convenient telepsychiatry throughout Alabama and in-person appointments in Trussville.
                 </p>
                 <div class="mt-7 flex flex-col gap-3 sm:flex-row">
                     <x-site.button-link :href="route('appointments')" icon="calendar">
@@ -193,30 +252,6 @@
                         </x-site.button-link>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="border-y border-brand-sand/70 bg-brand-beige">
-        <div class="mx-auto grid max-w-7xl gap-8 px-5 py-12 sm:px-8 lg:grid-cols-[0.7fr_1.7fr] lg:items-center lg:px-10 lg:py-10">
-            <div class="lg:border-r lg:border-brand-green/30 lg:pr-10">
-                <h2 class="font-serif text-4xl font-normal leading-none tracking-[-0.025em] text-brand-green">
-                    Accepted Insurance
-                </h2>
-                <p class="mt-4 max-w-sm text-base leading-7 text-slate-700">
-                    The existing practice website identifies these eight insurance providers.
-                </p>
-            </div>
-
-            <div>
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    @foreach ($insurers as $insurer)
-                        <x-site.insurance-logo :name="$insurer" />
-                    @endforeach
-                </div>
-                <p class="mt-4 text-xs leading-5 text-slate-600">
-                    Insurance participation varies by plan and must be confirmed directly with the practice and your insurer before scheduling.
-                </p>
             </div>
         </div>
     </section>
@@ -402,7 +437,7 @@
 
                     <button
                         type="button"
-                        class="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-slate-700 motion-safe:transition hover:bg-brand-beige hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+                        class="inline-flex size-10 items-center justify-center rounded-full text-slate-700 motion-safe:transition hover:bg-brand-beige hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
                         @click="toggleAutoplay()"
                         :aria-label="autoplayPaused ? 'Play automatic testimonial rotation' : 'Pause automatic testimonial rotation'"
                         aria-controls="testimonial-slides"
@@ -416,11 +451,37 @@
                                 <path d="M4.5 2.8v10.4L13 8 4.5 2.8Z" />
                             </svg>
                         </span>
-                        <span x-text="autoplayPaused ? 'Automatic rotation paused' : (interactionPaused ? 'Paused while interacting' : 'Auto-rotating testimonials')">
-                            Auto-rotating testimonials
-                        </span>
                     </button>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-y border-brand-sand/70 bg-brand-beige" data-home-office-location>
+        <div class="mx-auto grid max-w-7xl items-center gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:px-10 lg:py-16">
+            <div>
+                <h2 class="font-serif text-4xl font-normal leading-tight tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
+                    Visit Our Trussville Office
+                </h2>
+                <address class="mt-5 text-lg font-semibold not-italic leading-7 text-slate-800">
+                    {{ config('practice.address.line_1') }}<br>
+                    {{ config('practice.address.city_state_zip') }}
+                </address>
+                <div class="mt-7">
+                    <x-site.button-link :href="config('practice.address.directions_url')" variant="outline" arrow external>
+                        Get Directions on Google Maps
+                    </x-site.button-link>
+                </div>
+            </div>
+
+            <div class="aspect-[16/10] overflow-hidden rounded-3xl border border-brand-sand bg-white shadow-[0_14px_36px_rgba(31,50,42,0.1)]">
+                <iframe
+                    class="size-full"
+                    src="{{ config('practice.address.map_embed_url') }}"
+                    title="Google Map showing Falola Psychiatry Practice"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
             </div>
         </div>
     </section>

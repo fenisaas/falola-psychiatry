@@ -8,6 +8,16 @@ namespace App\Support;
  */
 final class PracticePolicyCatalog
 {
+    /** @var list<string> */
+    private const OFFICE_FEES = [
+        'With Insurance: Only your co-pay required at the time of visit.',
+        'For insurance plan with deductible, you may also be asked for a $100 deposit. After you receive an explanation of benefits, you may call our office for a refund of the difference in case of overpayment, or we will credit your account in case of overpayment.',
+        'Without Insurance: The fees for self-pay:',
+        'New patient consultation ($300): A new patient consultation is where we discuss your concerns, prior treatment, and treatment expectations. We will use this time to see if we are a good fit for each other and develop a treatment plan.',
+        'Follow-up appointment ($175): Follow-up appointments are scheduled at a frequency agreed upon by you and Dr. Falola to fit your needs. Additional time is allotted when needed. Brief psychotherapy is included in every appointment.',
+        'All past due balances and copays are due at the time of service. Insurance company contracts require that we collect copay on the date of service. There is a $30 fee for returned checks. We accept cash, check, debit cards, and most major credit cards.',
+    ];
+
     /** @var list<PracticePolicy> */
     private const POLICIES = [
         [
@@ -19,16 +29,10 @@ final class PracticePolicyCatalog
                     'heading' => 'Check-In Process',
                     'paragraphs' => [
                         'A valid ID is required during check-in for every visit. A patient/parent/guardian must notify the office of changes in address, telephone number, or insurance.',
-                        'With Insurance: Only your co-pay required at the time of visit.',
-                        'For insurance plan with deductible, you may also be asked for a $100 deposit. After you receive an explanation of benefits, you may call our office for a refund of the difference in case of overpayment, or we will credit your account in case of overpayment.',
-                        'Without Insurance: The fees for self-pay:',
-                        'New patient consultation ($300): A new patient consultation is where we discuss your concerns, prior treatment, and treatment expectations. We will use this time to see if we are a good fit for each other and develop a treatment plan.',
-                        'Follow-up appointment ($175): Follow-up appointments are scheduled at a frequency agreed upon by you and Dr. Falola to fit your needs. Additional time is allotted when needed. Brief psychotherapy is included in every appointment.',
-                        'All past due balances and copays are due at the time of service. Insurance company contracts require that we collect copay on the date of service. There is a $30 fee for returned checks. We accept cash, check, debit cards, and most major credit cards.',
                     ],
                 ],
             ],
-            'review_note' => 'The self-pay amounts in this preserved wording conflict with amounts attached to legacy payment links. Contact the office for current fees before scheduling or paying.',
+            'review_note' => 'The self-pay amounts in this preserved wording conflict with amounts attached to legacy payment links and require practice confirmation before scheduling or paying.',
         ],
         [
             'title' => 'Cancellations & No-Shows',
@@ -194,5 +198,11 @@ final class PracticePolicyCatalog
     public static function all(): array
     {
         return self::POLICIES;
+    }
+
+    /** @return list<string> */
+    public static function officeFees(): array
+    {
+        return self::OFFICE_FEES;
     }
 }

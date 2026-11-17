@@ -22,11 +22,28 @@ class SiteRoutesTest extends TestCase
         $response
             ->assertOk()
             ->assertViewIs('home')
-            ->assertSee('Mental Health Care')
+            ->assertSee('Personalized, Evidence-Based Psychiatric Care')
+            ->assertSee('Compassionate psychiatric evaluations and medication management for adults, with convenient telepsychiatry throughout Alabama and in-person appointments in Trussville.')
             ->assertSee('Dr. Michael Falola, M.D., M.P.H.')
             ->assertSee('Accepted Insurance')
+            ->assertSee('3516 Vann Road Suite 114-A')
+            ->assertSee('Trussville, AL 35235')
+            ->assertSee('Google Map showing Falola Psychiatry Practice')
             ->assertSee('href="'.route('appointments').'"', false)
+            ->assertDontSee('Evidence-Based Mental Health Care for Adults')
             ->assertDontSee('board-certified', false);
+
+        $content = $response->getContent();
+
+        $this->assertLessThan(
+            strpos($content, 'Personalized, Evidence-Based Psychiatric Care'),
+            strpos($content, 'Accepted Insurance'),
+        );
+        $this->assertSame(3, substr_count($content, 'data-hero-slide'));
+        $this->assertStringContainsString('heroCarousel({ count: 3, intervalMs: 5500 })', $content);
+        $this->assertStringContainsString('images/home/hero-mountains.webp', $content);
+        $this->assertStringContainsString('images/home/service-anxiety.jpg', $content);
+        $this->assertStringContainsString('images/home/service-trauma.jpg', $content);
     }
 
     public function test_home_page_links_every_service_card_to_its_detail_route(): void
@@ -167,8 +184,9 @@ class SiteRoutesTest extends TestCase
             ->assertSee('Get in Touch')
             ->assertSee('href="tel:+16593466314"', false)
             ->assertSee('href="mailto:contact@falolapsychiatry.com"', false)
-            ->assertSee('289 Glen Cross Dr, Trussville, AL 35173')
-            ->assertSee('https://www.google.com/maps/dir/?api=1&amp;destination=289+Glen+Cross+Dr%2C+Trussville%2C+AL+35173', false)
+            ->assertSee('3516 Vann Road Suite 114-A, Trussville, AL 35235')
+            ->assertSee('https://www.google.com/maps/dir/?api=1&amp;destination=3516+Vann+Road+Suite+114-A%2C+Trussville%2C+AL+35235', false)
+            ->assertSee('https://www.google.com/maps?q=3516+Vann+Road+Suite+114-A%2C+Trussville%2C+AL+35235&amp;output=embed', false)
             ->assertSee('Please contact our office to confirm current office hours and appointment availability.')
             ->assertSee('href="'.route('appointments').'"', false)
             ->assertSee('This website and ordinary email are not patient portal or emergency channels.')
@@ -202,8 +220,11 @@ class SiteRoutesTest extends TestCase
         $response
             ->assertOk()
             ->assertViewIs('office-fees-policies')
-            ->assertSee('Office, Fees &amp; Practice Policies', false)
-            ->assertSee('Consultation Fees')
+            ->assertSee('Office Fees &amp; Practice Policies', false)
+            ->assertSee('Office Fees')
+            ->assertSee('With Insurance: Only your co-pay required at the time of visit.')
+            ->assertSee('Fee verification required')
+            ->assertSee('The preserved self-pay amounts conflict with historical payment-link amounts and require practice confirmation before scheduling or paying.')
             ->assertSee('Practice Policies')
             ->assertSee('72-hour notice')
             ->assertSee('48–72 hours')
@@ -215,7 +236,9 @@ class SiteRoutesTest extends TestCase
             ->assertDontSee('Policy review notice')
             ->assertDontSee('Review required:')
             ->assertDontSee('Legacy website wording')
-            ->assertDontSee('Historical pricing discrepancy');
+            ->assertDontSee('Historical pricing discrepancy')
+            ->assertDontSee('Contact office')
+            ->assertDontSee('Contact the office for current consultation fees and payment options.');
 
         foreach (self::practicePolicyHeadings() as $heading) {
             $response->assertSee($heading);
@@ -246,6 +269,9 @@ class SiteRoutesTest extends TestCase
         $this->assertSame(0, substr_count($header, 'href="'.route('patient-information').'"'));
         $this->assertStringContainsString('sticky top-0', $header);
         $this->assertStringContainsString('items-center gap-5 min-[1380px]:flex', $header);
+        $this->assertStringContainsString('data-desktop-action-row', $header);
+        $this->assertLessThan(strpos($header, 'data-desktop-action-row'), strpos($header, '</nav>'));
+        $this->assertStringContainsString('Office Fees &amp; Policies', $header);
         $this->assertSame(1, substr_count($header, 'src="'.asset('images/home/logo-mark-transparent.png').'"'));
         $this->assertStringContainsString('absolute left-1/2', $header);
         $this->assertStringNotContainsString('brand-lockup-mark', $header);

@@ -5,7 +5,7 @@
 @section('canonical', route('contact'))
 
 @php
-    $directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=289+Glen+Cross+Dr%2C+Trussville%2C+AL+35173';
+    $directionsUrl = config('practice.address.directions_url');
 @endphp
 
 @section('content')
@@ -73,7 +73,9 @@
                 </span>
                 <div>
                     <h2 class="font-serif text-2xl font-normal text-brand-green">Visit Our Office</h2>
-                    <address class="mt-1 text-lg font-semibold not-italic leading-6 text-brand-green">289 Glen Cross Dr,<br>Trussville, AL 35173</address>
+                    <address class="mt-1 text-lg font-semibold not-italic leading-6 text-brand-green">
+                        {{ config('practice.address.line_1') }},<br>{{ config('practice.address.city_state_zip') }}
+                    </address>
                     <p class="mt-2 text-base leading-7 text-slate-700">In-person appointments are scheduled in advance.</p>
                 </div>
             </article>
@@ -115,16 +117,17 @@
                     <h2 id="location-heading" class="font-serif text-4xl font-normal tracking-[-0.03em] text-brand-green">Our Location</h2>
                     <address class="mt-3 flex items-start gap-3 text-base not-italic leading-7 text-slate-800">
                         <svg class="mt-0.5 size-5 shrink-0 text-brand-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s6-5.25 6-11.25a6 6 0 1 0-12 0C6 15.75 12 21 12 21Z" /><circle cx="12" cy="9.75" r="2.25" /></svg>
-                        <span>289 Glen Cross Dr, Trussville, AL 35173</span>
+                        <span>{{ config('practice.address.full') }}</span>
                     </address>
 
-                    <div class="mt-6 grid min-h-48 place-items-center rounded-2xl border border-brand-green/10 bg-[#edf4ea] px-7 py-8 text-center">
-                        <div>
-                            <span class="mx-auto grid size-16 place-items-center rounded-full bg-white text-brand-green shadow-sm" aria-hidden="true">
-                                <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s6-5.25 6-11.25a6 6 0 1 0-12 0C6 15.75 12 21 12 21Z" /><circle cx="12" cy="9.75" r="2.25" /></svg>
-                            </span>
-                            <p class="mt-4 text-sm leading-6 text-slate-700">Open the verified office address in Google Maps for directions.</p>
-                        </div>
+                    <div class="mt-6 aspect-[4/3] overflow-hidden rounded-2xl border border-brand-green/10 bg-[#edf4ea]">
+                        <iframe
+                            class="size-full"
+                            src="{{ config('practice.address.map_embed_url') }}"
+                            title="Google Map showing Falola Psychiatry Practice"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
                     </div>
 
                     <div class="mt-6">

@@ -44,6 +44,28 @@ class SiteRoutesTest extends TestCase
         $this->assertStringContainsString('images/home/hero-mountains.webp', $content);
         $this->assertStringContainsString('images/home/service-anxiety.jpg', $content);
         $this->assertStringContainsString('images/home/service-trauma.jpg', $content);
+        $this->assertStringContainsString('duration-1000 ease-in-out motion-reduce:transition-none', $content);
+        $this->assertLessThan(
+            strpos($content, 'Visit Our Trussville Office'),
+            strpos($content, 'Personalized, Evidence-Based Psychiatric Care'),
+        );
+        $this->assertLessThan(
+            strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
+            strpos($content, 'Visit Our Trussville Office'),
+        );
+    }
+
+    public function test_home_page_renders_the_configured_office_photo_when_the_asset_exists(): void
+    {
+        config(['practice.address.photo_path' => 'images/home/hero-mountains.webp']);
+
+        $response = $this->get('/');
+
+        $response
+            ->assertOk()
+            ->assertSee('data-office-building-photo', false)
+            ->assertSee('src="'.asset('images/home/hero-mountains.webp').'"', false)
+            ->assertSee('alt="Falola Psychiatry Practice entrance at 3516 Vann Road in Trussville."', false);
     }
 
     public function test_home_page_links_every_service_card_to_its_detail_route(): void
@@ -268,9 +290,12 @@ class SiteRoutesTest extends TestCase
         $this->assertSame(2, substr_count($header, 'href="'.route('appointments').'"'));
         $this->assertSame(0, substr_count($header, 'href="'.route('patient-information').'"'));
         $this->assertStringContainsString('sticky top-0', $header);
-        $this->assertStringContainsString('items-center gap-5 min-[1380px]:flex', $header);
+        $this->assertStringContainsString('items-center gap-6 min-[1380px]:flex', $header);
         $this->assertStringContainsString('data-desktop-action-row', $header);
         $this->assertLessThan(strpos($header, 'data-desktop-action-row'), strpos($header, '</nav>'));
+        $this->assertStringContainsString('min-w-56', $header);
+        $this->assertStringContainsString('min-w-72', $header);
+        $this->assertSame(2, substr_count($header, 'min-h-14'));
         $this->assertStringContainsString('Office Fees &amp; Policies', $header);
         $this->assertSame(1, substr_count($header, 'src="'.asset('images/home/logo-mark-transparent.png').'"'));
         $this->assertStringContainsString('absolute left-1/2', $header);

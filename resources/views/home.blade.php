@@ -93,27 +93,30 @@
         'ChampVa',
         'Viva',
     ];
+
+    $officePhotoPath = config('practice.address.photo_path');
+    $hasOfficePhoto = is_string($officePhotoPath) && file_exists(public_path($officePhotoPath));
 @endphp
 
 @section('content')
     <section class="border-b border-brand-sand/70 bg-brand-beige">
-        <div class="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[0.7fr_1.7fr] lg:items-center lg:px-10">
-            <div class="lg:border-r lg:border-brand-green/30 lg:pr-10">
-                <h2 class="font-serif text-4xl font-normal leading-none tracking-[-0.025em] text-brand-green">
+        <div class="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 sm:py-11 lg:grid-cols-[0.75fr_1.75fr] lg:items-center lg:gap-12 lg:px-10 lg:py-10">
+            <div class="lg:border-r lg:border-brand-green/30 lg:pr-12">
+                <h2 class="font-serif text-4xl font-normal leading-none tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
                     Accepted Insurance
                 </h2>
-                <p class="mt-4 max-w-sm text-base leading-7 text-slate-700">
+                <p class="mt-5 max-w-sm text-base leading-7 text-slate-700">
                     The existing practice website identifies these eight insurance providers.
                 </p>
             </div>
 
             <div>
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
                     @foreach ($insurers as $insurer)
                         <x-site.insurance-logo :name="$insurer" />
                     @endforeach
                 </div>
-                <p class="mt-4 text-xs leading-5 text-slate-600">
+                <p class="mt-4 text-[0.8125rem] leading-5 text-slate-600">
                     Insurance participation varies by plan and must be confirmed directly with the practice and your insurer before scheduling.
                 </p>
             </div>
@@ -131,20 +134,16 @@
     >
         @foreach ($heroImages as $heroImage)
             <img
-                x-show="active === {{ $loop->index }}"
-                x-transition:enter="motion-safe:transition-opacity motion-safe:duration-700 motion-safe:ease-out"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                @if (! $loop->first) x-cloak @endif
-                class="absolute inset-0 -z-20 size-full object-cover {{ $heroImage['position'] }}"
+                class="absolute inset-0 -z-20 size-full object-cover transition-opacity duration-1000 ease-in-out motion-reduce:transition-none {{ $heroImage['position'] }}"
                 src="{{ asset($heroImage['path']) }}"
                 alt=""
                 width="2172"
                 height="724"
+                style="opacity: {{ $loop->first ? '1' : '0' }}"
+                :style="`opacity: ${active === {{ $loop->index }} ? 1 : 0}`"
+                :aria-hidden="(active !== {{ $loop->index }}).toString()"
                 @if ($loop->first)
                     fetchpriority="high"
-                @else
-                    loading="lazy"
                 @endif
                 data-hero-slide
             >
@@ -166,6 +165,63 @@
                     <x-site.button-link :href="route('services.index')" variant="outline" arrow>
                         Explore Our Services
                     </x-site.button-link>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="border-y border-brand-sand/70 bg-brand-beige" data-home-office-location>
+        <div @class([
+            'mx-auto px-5 py-14 sm:px-8 lg:px-10 lg:py-16',
+            'max-w-7xl' => $hasOfficePhoto,
+            'max-w-5xl' => ! $hasOfficePhoto,
+        ])>
+            <h2 class="text-center font-serif text-4xl font-normal leading-tight tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
+                Visit Our Trussville Office
+            </h2>
+
+            <div @class([
+                'mt-9 grid items-stretch gap-5 lg:gap-6',
+                'lg:grid-cols-3' => $hasOfficePhoto,
+                'lg:grid-cols-[0.8fr_1.5fr]' => ! $hasOfficePhoto,
+            ])>
+                <div class="flex flex-col justify-center rounded-3xl border border-brand-sand bg-white/70 p-7 shadow-[0_14px_36px_rgba(31,50,42,0.08)] lg:p-8">
+                    <address class="text-lg font-semibold not-italic leading-7 text-slate-800">
+                        {{ config('practice.address.line_1') }}<br>
+                        {{ config('practice.address.city_state_zip') }}
+                    </address>
+                    <div class="mt-7">
+                        <x-site.button-link class="w-full" :href="config('practice.address.directions_url')" variant="outline" arrow external>
+                            Get Directions on Google Maps
+                        </x-site.button-link>
+                    </div>
+                </div>
+
+                @if ($hasOfficePhoto)
+                    <figure class="aspect-[16/11] overflow-hidden rounded-3xl border border-brand-sand bg-white shadow-[0_14px_36px_rgba(31,50,42,0.1)]" data-office-building-photo>
+                        <img
+                            class="size-full object-cover object-center"
+                            src="{{ asset($officePhotoPath) }}"
+                            alt="Falola Psychiatry Practice entrance at 3516 Vann Road in Trussville."
+                            width="1776"
+                            height="866"
+                            loading="lazy"
+                        >
+                    </figure>
+                @endif
+
+                <div @class([
+                    'overflow-hidden rounded-3xl border border-brand-sand bg-white shadow-[0_14px_36px_rgba(31,50,42,0.1)]',
+                    'aspect-[16/11]' => $hasOfficePhoto,
+                    'aspect-video' => ! $hasOfficePhoto,
+                ])>
+                    <iframe
+                        class="size-full"
+                        src="{{ config('practice.address.map_embed_url') }}"
+                        title="Google Map showing Falola Psychiatry Practice"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
                 </div>
             </div>
         </div>
@@ -453,35 +509,6 @@
                         </span>
                     </button>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="border-y border-brand-sand/70 bg-brand-beige" data-home-office-location>
-        <div class="mx-auto grid max-w-7xl items-center gap-8 px-5 py-14 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:px-10 lg:py-16">
-            <div>
-                <h2 class="font-serif text-4xl font-normal leading-tight tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
-                    Visit Our Trussville Office
-                </h2>
-                <address class="mt-5 text-lg font-semibold not-italic leading-7 text-slate-800">
-                    {{ config('practice.address.line_1') }}<br>
-                    {{ config('practice.address.city_state_zip') }}
-                </address>
-                <div class="mt-7">
-                    <x-site.button-link :href="config('practice.address.directions_url')" variant="outline" arrow external>
-                        Get Directions on Google Maps
-                    </x-site.button-link>
-                </div>
-            </div>
-
-            <div class="aspect-[16/10] overflow-hidden rounded-3xl border border-brand-sand bg-white shadow-[0_14px_36px_rgba(31,50,42,0.1)]">
-                <iframe
-                    class="size-full"
-                    src="{{ config('practice.address.map_embed_url') }}"
-                    title="Google Map showing Falola Psychiatry Practice"
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
             </div>
         </div>
     </section>

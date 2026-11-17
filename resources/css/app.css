@@ -36,7 +36,7 @@
 
 @layer components {
     .site-nav-link {
-        @apply relative inline-flex items-center gap-1 py-3 text-[0.9375rem] font-semibold text-brand-navy transition hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green;
+        @apply relative inline-flex items-center gap-1 py-3 text-base font-semibold text-brand-navy transition hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green;
     }
 
     .site-nav-link::after {
@@ -70,7 +70,7 @@
     }
 
     .brand-lockup-header .brand-lockup-image {
-        @apply h-16;
+        @apply h-16 sm:h-20 min-[1380px]:h-24;
     }
 
     .brand-lockup-light .brand-lockup-image {

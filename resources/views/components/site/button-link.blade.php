@@ -5,6 +5,7 @@
     'arrow' => false,
     'external' => false,
     'compact' => false,
+    'prominent' => false,
 ])
 
 @php
@@ -14,9 +15,11 @@
         default => 'border border-brand-green bg-brand-green text-white hover:border-brand-green-dark hover:bg-brand-green-dark',
     };
 
-    $sizeClasses = $compact
-        ? 'min-h-10 px-3 py-2 text-sm'
-        : 'min-h-11 px-5 py-3 text-[0.9375rem] sm:px-6';
+    $sizeClasses = match (true) {
+        $compact => 'min-h-10 px-3 py-2 text-sm',
+        $prominent => 'min-h-14 px-7 py-3.5 text-base sm:px-9',
+        default => 'min-h-11 px-5 py-3 text-[0.9375rem] sm:px-6',
+    };
 @endphp
 
 <a
@@ -31,7 +34,11 @@
         $variantClasses,
     ]) }}
 >
-    @if ($icon === 'calendar')
+    @if ($icon === 'portal')
+        <svg class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5v11.5H3.75V5.25Zm5 15h6.5M12 16.75v3.5" />
+        </svg>
+    @elseif ($icon === 'calendar')
         <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3.75 9h16.5M5.25 5.25h13.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-12a1.5 1.5 0 0 1 1.5-1.5Z" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 12.75h.008v.008H8.25v-.008Zm3.75 0h.008v.008H12v-.008Zm3.75 0h.008v.008h-.008v-.008Zm-7.5 3.75h.008v.008H8.25V16.5Zm3.75 0h.008v.008H12V16.5Z" />

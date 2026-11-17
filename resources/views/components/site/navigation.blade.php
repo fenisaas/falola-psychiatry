@@ -1,8 +1,8 @@
 <header class="sticky top-0 z-40 border-b border-brand-sand/70 bg-white" x-data="{ navigationOpen: false }" @keydown.escape.window="navigationOpen = false">
-    <nav class="relative mx-auto flex max-w-[90rem] items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8" aria-label="Primary navigation">
-        <x-site.logo compact />
+    <nav class="relative mx-auto flex max-w-[90rem] items-center justify-between gap-3 px-4 py-3 sm:px-6 min-[1380px]:min-h-20 min-[1380px]:py-0 lg:px-8" aria-label="Primary navigation">
+        <x-site.logo class="min-[1380px]:absolute min-[1380px]:left-8 min-[1380px]:top-3" compact />
 
-        <div class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 min-[1380px]:flex">
+        <div class="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 min-[1380px]:flex">
             <a class="site-nav-link {{ request()->routeIs('home') ? 'site-nav-link-active' : '' }}" href="{{ route('home') }}">Home</a>
             <a class="site-nav-link {{ request()->routeIs('about') ? 'site-nav-link-active' : '' }}" href="{{ route('about') }}">About</a>
             <a class="site-nav-link {{ request()->routeIs('services.*') ? 'site-nav-link-active' : '' }}" href="{{ route('services.index') }}">
@@ -28,13 +28,13 @@
     </nav>
 
     <div class="hidden border-t border-brand-sand/60 bg-brand-ivory/55 min-[1380px]:block" data-desktop-action-row>
-        <div class="mx-auto flex max-w-[90rem] items-center justify-end gap-3 px-8 py-2.5">
+        <div class="mx-auto flex max-w-[90rem] items-center justify-center gap-4 px-8 py-3">
             @if ($patientPortalUrl !== null)
-                <x-site.button-link class="min-w-44" :href="$patientPortalUrl" variant="outline" external>
+                <x-site.button-link class="min-w-56" :href="$patientPortalUrl" variant="outline" icon="portal" prominent external>
                     Patient Portal
                 </x-site.button-link>
             @endif
-            <x-site.button-link class="min-w-52" :href="route('appointments')" icon="calendar">
+            <x-site.button-link class="min-w-72" :href="route('appointments')" icon="calendar" prominent>
                 Book an Appointment
             </x-site.button-link>
         </div>

@@ -36,7 +36,15 @@ class SiteRoutesTest extends TestCase
         $content = $response->getContent();
 
         $this->assertLessThan(
+            strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
             strpos($content, 'Personalized, Evidence-Based Psychiatric Care'),
+        );
+        $this->assertLessThan(
+            strpos($content, 'Accepted Insurance'),
+            strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
+        );
+        $this->assertLessThan(
+            strpos($content, 'Comprehensive Psychiatric Services'),
             strpos($content, 'Accepted Insurance'),
         );
         $this->assertSame(3, substr_count($content, 'data-hero-slide'));
@@ -47,10 +55,10 @@ class SiteRoutesTest extends TestCase
         $this->assertStringContainsString('duration-1000 ease-in-out motion-reduce:transition-none', $content);
         $this->assertLessThan(
             strpos($content, 'Visit Our Trussville Office'),
-            strpos($content, 'Personalized, Evidence-Based Psychiatric Care'),
+            strpos($content, 'Testimonials'),
         );
         $this->assertLessThan(
-            strpos($content, 'Dr. Michael Falola, M.D., M.P.H.'),
+            strpos($content, 'Take the Next Step'),
             strpos($content, 'Visit Our Trussville Office'),
         );
     }

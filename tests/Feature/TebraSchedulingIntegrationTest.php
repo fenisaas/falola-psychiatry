@@ -98,7 +98,7 @@ class TebraSchedulingIntegrationTest extends TestCase
     public function test_all_appointment_ctas_use_the_centralized_internal_route(): void
     {
         $pages = [
-            '/' => 4,
+            '/' => 3,
             '/about' => 4,
             '/services' => 4,
             '/telepsychiatry' => 4,

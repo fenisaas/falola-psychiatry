@@ -31,6 +31,7 @@ class SiteRoutesTest extends TestCase
             ->assertSee('Google Map showing Falola Psychiatry Practice')
             ->assertSee('href="'.route('appointments').'"', false)
             ->assertDontSee('Evidence-Based Mental Health Care for Adults')
+            ->assertDontSee('Take the Next Step')
             ->assertDontSee('board-certified', false);
 
         $content = $response->getContent();
@@ -56,10 +57,6 @@ class SiteRoutesTest extends TestCase
         $this->assertLessThan(
             strpos($content, 'Visit Our Trussville Office'),
             strpos($content, 'Testimonials'),
-        );
-        $this->assertLessThan(
-            strpos($content, 'Take the Next Step'),
-            strpos($content, 'Visit Our Trussville Office'),
         );
     }
 

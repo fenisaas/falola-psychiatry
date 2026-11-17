@@ -512,35 +512,4 @@
             </div>
         </div>
     </section>
-
-    <section class="relative isolate overflow-hidden">
-        <img
-            class="absolute inset-0 -z-20 size-full object-cover object-center"
-            src="{{ asset('images/home/appointment-office.webp') }}"
-            alt=""
-            width="2172"
-            height="724"
-            loading="lazy"
-        >
-        <div class="absolute inset-0 -z-10 bg-brand-ivory/70 backdrop-blur-[1px]"></div>
-
-        <div class="mx-auto flex max-w-7xl items-center justify-center px-5 py-16 text-center sm:px-8 lg:px-10">
-            <div class="max-w-2xl">
-                <h2 class="font-serif text-5xl font-normal tracking-[-0.03em] text-brand-green">
-                    Take the Next Step
-                </h2>
-                <p class="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-800 sm:text-lg">
-                    Schedule an appointment or contact our office to learn more.
-                </p>
-                <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-                    <x-site.button-link :href="route('appointments')" icon="calendar">
-                        Book an Appointment
-                    </x-site.button-link>
-                    <x-site.button-link :href="route('contact')" variant="outline" icon="phone">
-                        Contact Our Office
-                    </x-site.button-link>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

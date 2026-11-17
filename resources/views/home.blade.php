@@ -227,17 +227,17 @@
         <div class="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
             <div class="mx-auto max-w-3xl text-center">
                 <h2 id="testimonials-heading" class="font-serif text-4xl font-normal leading-tight tracking-[-0.025em] text-brand-green lg:text-[2.75rem]">
-                    What Patients Have Shared
+                    Testimonials
                 </h2>
-                <p class="mt-3 text-[1.0625rem] leading-7 text-slate-700 sm:text-lg">
-                    Reflections from patients about their experiences with Falola Psychiatry Practice.
-                </p>
             </div>
 
             <div
                 class="mx-auto mt-9 max-w-5xl rounded-[2rem] border border-brand-sand bg-brand-ivory shadow-[0_22px_60px_rgba(0,61,45,0.11)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green"
-                x-data="testimonialCarousel({ count: {{ count($testimonials) }} })"
-                @keydown="handleKeydown($event)"
+                x-data="{ active: 0, count: {{ count($testimonials) }} }"
+                @keydown.left.prevent.stop="active = (active - 1 + count) % count"
+                @keydown.right.prevent.stop="active = (active + 1) % count"
+                @keydown.home.prevent.stop="active = 0"
+                @keydown.end.prevent.stop="active = count - 1"
                 role="region"
                 aria-roledescription="carousel"
                 aria-label="Patient testimonials"
@@ -276,7 +276,7 @@
                         <button
                             type="button"
                             class="inline-flex size-11 items-center justify-center rounded-full border border-brand-green/25 bg-white text-brand-green shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
-                            @click="previous()"
+                            @click="active = (active - 1 + count) % count"
                             aria-label="Show previous testimonial"
                             aria-controls="testimonial-slides"
                             data-testimonial-previous
@@ -291,7 +291,7 @@
                         <button
                             type="button"
                             class="inline-flex size-11 items-center justify-center rounded-full border border-brand-green/25 bg-white text-brand-green shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
-                            @click="next()"
+                            @click="active = (active + 1) % count"
                             aria-label="Show next testimonial"
                             aria-controls="testimonial-slides"
                             data-testimonial-next
@@ -307,7 +307,7 @@
                             <button
                                 type="button"
                                 class="group inline-flex size-6 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-green"
-                                @click="goTo({{ $loop->index }})"
+                                @click="active = {{ $loop->index }}"
                                 :aria-current="active === {{ $loop->index }} ? 'true' : 'false'"
                                 aria-label="Show testimonial {{ $loop->iteration }} of {{ $loop->count }} from {{ $testimonial['name'] }}"
                                 aria-controls="testimonial-slides"

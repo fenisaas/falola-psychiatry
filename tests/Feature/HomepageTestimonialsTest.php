@@ -49,10 +49,14 @@ class HomepageTestimonialsTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertSee('x-data="testimonialCarousel({ count: 11 })"', false)
-            ->assertSee('@keydown="handleKeydown($event)"', false)
-            ->assertSee('@click="previous()"', false)
-            ->assertSee('@click="next()"', false)
+            ->assertSee('Testimonials')
+            ->assertDontSee('What Patients Have Shared')
+            ->assertDontSee('Reflections from patients about their experiences with Falola Psychiatry Practice.')
+            ->assertSee('x-data="{ active: 0, count: 11 }"', false)
+            ->assertSee('@keydown.left.prevent.stop="active = (active - 1 + count) % count"', false)
+            ->assertSee('@keydown.right.prevent.stop="active = (active + 1) % count"', false)
+            ->assertSee('@click="active = (active - 1 + count) % count"', false)
+            ->assertSee('@click="active = (active + 1) % count"', false)
             ->assertSee('aria-live="polite"', false)
             ->assertSee('aria-label="Show previous testimonial"', false)
             ->assertSee('aria-label="Show next testimonial"', false);

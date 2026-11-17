@@ -52,14 +52,20 @@ class HomepageTestimonialsTest extends TestCase
             ->assertSee('Testimonials')
             ->assertDontSee('What Patients Have Shared')
             ->assertDontSee('Reflections from patients about their experiences with Falola Psychiatry Practice.')
-            ->assertSee('x-data="{ active: 0, count: 11 }"', false)
-            ->assertSee('@keydown.left.prevent.stop="active = (active - 1 + count) % count"', false)
-            ->assertSee('@keydown.right.prevent.stop="active = (active + 1) % count"', false)
-            ->assertSee('@click="active = (active - 1 + count) % count"', false)
-            ->assertSee('@click="active = (active + 1) % count"', false)
-            ->assertSee('aria-live="polite"', false)
+            ->assertSee('window.setInterval', false)
+            ->assertSee('}, 5500);', false)
+            ->assertSee("window.matchMedia('(prefers-reduced-motion: reduce)').matches", false)
+            ->assertSee('@mouseenter="pauseForInteraction()"', false)
+            ->assertSee('@mouseleave="resumeAfterInteraction()"', false)
+            ->assertSee('@focusin="pauseForInteraction()"', false)
+            ->assertSee('@keydown.left.prevent.stop="previous()"', false)
+            ->assertSee('@keydown.right.prevent.stop="next()"', false)
+            ->assertSee('@click="toggleAutoplay()"', false)
+            ->assertSee(':aria-live="autoplayPaused || interactionPaused ? \'polite\' : \'off\'"', false)
             ->assertSee('aria-label="Show previous testimonial"', false)
-            ->assertSee('aria-label="Show next testimonial"', false);
+            ->assertSee('aria-label="Show next testimonial"', false)
+            ->assertSee('data-testimonial-autoplay', false)
+            ->assertSee('motion-safe:duration-500', false);
     }
 
     public function test_testimonial_content_is_html_escaped(): void

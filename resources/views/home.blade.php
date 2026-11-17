@@ -232,95 +232,194 @@
             </div>
 
             <div
-                class="mx-auto mt-9 max-w-5xl rounded-[2rem] border border-brand-sand bg-brand-ivory shadow-[0_22px_60px_rgba(0,61,45,0.11)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green"
-                x-data="{ active: 0, count: {{ count($testimonials) }} }"
-                @keydown.left.prevent.stop="active = (active - 1 + count) % count"
-                @keydown.right.prevent.stop="active = (active + 1) % count"
-                @keydown.home.prevent.stop="active = 0"
-                @keydown.end.prevent.stop="active = count - 1"
+                class="mx-auto mt-9 max-w-6xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green"
+                x-data="{
+                    active: 0,
+                    count: {{ count($testimonials) }},
+                    intervalId: null,
+                    autoplayPaused: false,
+                    interactionPaused: false,
+                    prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+                    init() {
+                        if (this.prefersReducedMotion) {
+                            this.autoplayPaused = true;
+                        } else {
+                            this.startAutoplay();
+                        }
+                    },
+                    startAutoplay() {
+                        this.stopAutoplay();
+
+                        if (this.autoplayPaused || this.interactionPaused || this.count < 2) {
+                            return;
+                        }
+
+                        this.intervalId = window.setInterval(() => {
+                            this.active = (this.active + 1) % this.count;
+                        }, 5500);
+                    },
+                    stopAutoplay() {
+                        if (this.intervalId !== null) {
+                            window.clearInterval(this.intervalId);
+                            this.intervalId = null;
+                        }
+                    },
+                    restartAutoplay() {
+                        if (!this.autoplayPaused && !this.interactionPaused) {
+                            this.startAutoplay();
+                        }
+                    },
+                    goTo(index) {
+                        this.active = index;
+                        this.restartAutoplay();
+                    },
+                    next() {
+                        this.active = (this.active + 1) % this.count;
+                        this.restartAutoplay();
+                    },
+                    previous() {
+                        this.active = (this.active - 1 + this.count) % this.count;
+                        this.restartAutoplay();
+                    },
+                    pauseForInteraction() {
+                        this.interactionPaused = true;
+                        this.stopAutoplay();
+                    },
+                    resumeAfterInteraction() {
+                        this.interactionPaused = false;
+                        this.restartAutoplay();
+                    },
+                    toggleAutoplay() {
+                        this.autoplayPaused = !this.autoplayPaused;
+
+                        if (this.autoplayPaused) {
+                            this.stopAutoplay();
+                        } else {
+                            this.startAutoplay();
+                        }
+                    },
+                    destroy() {
+                        this.stopAutoplay();
+                    },
+                }"
+                @mouseenter="pauseForInteraction()"
+                @mouseleave="resumeAfterInteraction()"
+                @focusin="pauseForInteraction()"
+                @focusout="if (!$el.contains($event.relatedTarget)) { resumeAfterInteraction() }"
+                @keydown.left.prevent.stop="previous()"
+                @keydown.right.prevent.stop="next()"
+                @keydown.home.prevent.stop="goTo(0)"
+                @keydown.end.prevent.stop="goTo(count - 1)"
                 role="region"
                 aria-roledescription="carousel"
                 aria-label="Patient testimonials"
                 tabindex="0"
             >
-                <div id="testimonial-slides" class="relative overflow-hidden px-6 py-9 sm:px-10 sm:py-11 lg:px-16 lg:py-12" aria-live="polite" aria-atomic="true">
-                    <svg class="absolute -left-2 -top-5 size-32 text-brand-green/8 sm:left-4 sm:size-36" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
-                        <path d="M13.8 35.1c0-11.7 6.2-21.1 18.5-28.2l3.2 5.2C27.8 17.4 24 23.2 23.8 29.6h10.6v23H13.8V35.1Zm27.3 0c0-11.7 6.2-21.1 18.5-28.2l3.2 5.2c-7.7 5.3-11.5 11.1-11.7 17.5h10.6v23H41.1V35.1Z" />
-                    </svg>
+                <div class="grid grid-cols-2 items-center gap-4 md:grid-cols-[3.5rem_minmax(0,1fr)_3.5rem] md:gap-5 lg:gap-7">
+                    <button
+                        type="button"
+                        class="order-2 inline-flex size-12 justify-self-end rounded-full border border-brand-green/25 bg-white text-brand-green shadow-[0_5px_15px_rgba(0,61,45,0.12)] motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green md:order-1 md:col-start-1 md:row-start-1 md:justify-self-center"
+                        @click="previous()"
+                        aria-label="Show previous testimonial"
+                        aria-controls="testimonial-slides"
+                        data-testimonial-previous
+                    >
+                        <svg class="m-auto size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m14.5 17-5-5 5-5" />
+                        </svg>
+                    </button>
 
-                    @foreach ($testimonials as $testimonial)
-                        <article
-                            x-show="active === {{ $loop->index }}"
-                            @if (! $loop->first) x-cloak @endif
-                            class="relative"
-                            role="group"
-                            aria-roledescription="slide"
-                            aria-label="{{ $loop->iteration }} of {{ $loop->count }}"
-                            data-testimonial-slide
-                        >
-                            <blockquote class="mx-auto max-w-4xl">
-                                <p class="text-pretty text-[1.0625rem] leading-8 text-slate-800 sm:text-xl sm:leading-9 lg:text-[1.375rem]">
-                                    {{ $testimonial['quote'] }}
-                                </p>
-                                <footer class="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-brand-sand/80 pt-5">
-                                    <cite class="not-italic font-semibold text-brand-green">{{ $testimonial['name'] }}</cite>
-                                    <span class="text-sm text-slate-600">{{ $testimonial['date'] }}</span>
-                                </footer>
-                            </blockquote>
-                        </article>
-                    @endforeach
-                </div>
+                    <div
+                        id="testimonial-slides"
+                        class="relative order-1 col-span-2 grid overflow-hidden rounded-[2rem] border border-brand-sand bg-white/75 px-6 py-9 shadow-[0_22px_60px_rgba(0,61,45,0.1)] sm:px-10 sm:py-11 md:order-2 md:col-span-1 md:col-start-2 md:row-start-1 lg:px-16 lg:py-12"
+                        :aria-live="autoplayPaused || interactionPaused ? 'polite' : 'off'"
+                        aria-atomic="true"
+                    >
+                        <svg class="absolute -left-2 -top-5 size-32 text-brand-green/8 sm:left-4 sm:size-36" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true">
+                            <path d="M13.8 35.1c0-11.7 6.2-21.1 18.5-28.2l3.2 5.2C27.8 17.4 24 23.2 23.8 29.6h10.6v23H13.8V35.1Zm27.3 0c0-11.7 6.2-21.1 18.5-28.2l3.2 5.2c-7.7 5.3-11.5 11.1-11.7 17.5h10.6v23H41.1V35.1Z" />
+                        </svg>
 
-                <div class="flex flex-col gap-5 border-t border-brand-sand/80 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-                    <div class="flex items-center justify-center gap-3 sm:order-2">
-                        <button
-                            type="button"
-                            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-green/25 bg-white text-brand-green shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
-                            @click="active = (active - 1 + count) % count"
-                            aria-label="Show previous testimonial"
-                            aria-controls="testimonial-slides"
-                            data-testimonial-previous
-                        >
-                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.5 17-5-5 5-5" />
-                            </svg>
-                        </button>
-                        <p class="min-w-14 text-center text-sm font-semibold tabular-nums text-brand-green" aria-hidden="true">
-                            <span x-text="active + 1">1</span> / {{ count($testimonials) }}
-                        </p>
-                        <button
-                            type="button"
-                            class="inline-flex size-11 items-center justify-center rounded-full border border-brand-green/25 bg-white text-brand-green shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-brand-green hover:bg-brand-green hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
-                            @click="active = (active + 1) % count"
-                            aria-label="Show next testimonial"
-                            aria-controls="testimonial-slides"
-                            data-testimonial-next
-                        >
-                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.5 7 5 5-5 5" />
-                            </svg>
-                        </button>
+                        @foreach ($testimonials as $testimonial)
+                            <article
+                                x-show="active === {{ $loop->index }}"
+                                x-transition:enter="motion-safe:transition-opacity motion-safe:duration-500 motion-safe:ease-out"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                @if (! $loop->first) x-cloak @endif
+                                class="relative col-start-1 row-start-1"
+                                role="group"
+                                aria-roledescription="slide"
+                                aria-label="{{ $loop->iteration }} of {{ $loop->count }}"
+                                data-testimonial-slide
+                            >
+                                <blockquote class="mx-auto max-w-4xl">
+                                    <p class="text-pretty text-[1.0625rem] leading-8 text-slate-800 sm:text-xl sm:leading-9 lg:text-[1.375rem]">
+                                        {{ $testimonial['quote'] }}
+                                    </p>
+                                    <footer class="mt-7 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-brand-sand/80 pt-5">
+                                        <cite class="not-italic font-semibold text-brand-green">{{ $testimonial['name'] }}</cite>
+                                        <span class="text-sm text-slate-600">{{ $testimonial['date'] }}</span>
+                                    </footer>
+                                </blockquote>
+                            </article>
+                        @endforeach
                     </div>
 
-                    <div class="flex flex-wrap items-center justify-center gap-1 sm:order-1" aria-label="Choose a testimonial">
+                    <button
+                        type="button"
+                        class="order-3 inline-flex size-12 justify-self-start rounded-full border border-brand-green bg-brand-green text-white shadow-[0_5px_15px_rgba(0,61,45,0.2)] motion-safe:transition motion-safe:duration-200 hover:border-brand-green-dark hover:bg-brand-green-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green md:col-start-3 md:row-start-1 md:justify-self-center"
+                        @click="next()"
+                        aria-label="Show next testimonial"
+                        aria-controls="testimonial-slides"
+                        data-testimonial-next
+                    >
+                        <svg class="m-auto size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9.5 7 5 5-5 5" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="mt-6 flex flex-col items-center gap-4">
+                    <div class="flex flex-wrap items-center justify-center gap-1" aria-label="Choose a testimonial">
                         @foreach ($testimonials as $testimonial)
                             <button
                                 type="button"
                                 class="group inline-flex size-6 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-green"
-                                @click="active = {{ $loop->index }}"
+                                @click="goTo({{ $loop->index }})"
                                 :aria-current="active === {{ $loop->index }} ? 'true' : 'false'"
                                 aria-label="Show testimonial {{ $loop->iteration }} of {{ $loop->count }} from {{ $testimonial['name'] }}"
                                 aria-controls="testimonial-slides"
                                 data-testimonial-indicator
                             >
                                 <span
-                                    class="h-2 rounded-full motion-safe:transition-all motion-safe:duration-200"
-                                    :class="active === {{ $loop->index }} ? 'w-5 bg-brand-green' : 'w-2 bg-brand-green/30 group-hover:bg-brand-green/55'"
+                                    class="size-2 rounded-full motion-safe:transition-all motion-safe:duration-300"
+                                    :class="active === {{ $loop->index }} ? 'bg-brand-green ring-2 ring-brand-green/20 ring-offset-2' : 'bg-brand-green/30 group-hover:bg-brand-green/55'"
                                     aria-hidden="true"
                                 ></span>
                             </button>
                         @endforeach
                     </div>
+
+                    <button
+                        type="button"
+                        class="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-slate-700 motion-safe:transition hover:bg-brand-beige hover:text-brand-green focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+                        @click="toggleAutoplay()"
+                        :aria-label="autoplayPaused ? 'Play automatic testimonial rotation' : 'Pause automatic testimonial rotation'"
+                        aria-controls="testimonial-slides"
+                        data-testimonial-autoplay
+                    >
+                        <span class="inline-flex size-6 items-center justify-center rounded-full border border-brand-green text-brand-green" aria-hidden="true">
+                            <svg x-show="!autoplayPaused" class="size-3" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M4 3.5h2.25v9H4v-9Zm5.75 0H12v9H9.75v-9Z" />
+                            </svg>
+                            <svg x-show="autoplayPaused" x-cloak class="ml-0.5 size-3" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M4.5 2.8v10.4L13 8 4.5 2.8Z" />
+                            </svg>
+                        </span>
+                        <span x-text="autoplayPaused ? 'Automatic rotation paused' : (interactionPaused ? 'Paused while interacting' : 'Auto-rotating testimonials')">
+                            Auto-rotating testimonials
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>
